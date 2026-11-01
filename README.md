@@ -7,6 +7,25 @@ timelines, ranked diagnostic triage, and evidence-backed inspection
 recommendations, with calibrated uncertainty and explicit abstention when the
 evidence is insufficient.
 
+## Quickstart
+
+Four commands, from the repo root — they ingest the synthetic seed corpus
+and run the evaluation harness against its adjudicated labels (all data is
+synthetic; see `docs/testing-plan.md`):
+
+```bash
+pip install -e '.[dev]'   # 1. install the backend + dev tools
+make demo                 # 2. ingest the seed corpus, then show a ranked
+                          #    diagnosis with citations, an abstention,
+                          #    and a feedback round-trip
+make eval                 # 3. extraction P/R, diagnosis hit@3 vs. the
+                          #    frequency baseline, abstention correctness
+pytest -q                 # 4. the full test suite (the same thresholds CI runs)
+```
+
+`make demo` and `make eval` are the demo runbook and evaluation harness
+from `docs/testing-plan.md` (§4 and §3).
+
 ## Stack
 
 - **Backend:** Python 3.11, FastAPI, SQLAlchemy, SQLite
