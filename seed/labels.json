@@ -1,0 +1,807 @@
+{
+  "assets": [
+    {
+      "asset_id": "AHU-1",
+      "contradiction_pairs": [],
+      "equipment_type": "air_handling_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 7 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2009,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0001",
+          "WO-0002",
+          "WO-0003",
+          "WO-0004",
+          "WO-0005",
+          "WO-0006",
+          "WO-0007"
+        ]
+      },
+      "site": "Harborview Medical Center",
+      "work_order_count": 7
+    },
+    {
+      "asset_id": "AHU-2",
+      "contradiction_pairs": [],
+      "equipment_type": "air_handling_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 7 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2009,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0008",
+          "WO-0009",
+          "WO-0010",
+          "WO-0011",
+          "WO-0012",
+          "WO-0013",
+          "WO-0014"
+        ]
+      },
+      "site": "Harborview Medical Center",
+      "work_order_count": 7
+    },
+    {
+      "asset_id": "AHU-3",
+      "contradiction_pairs": [],
+      "equipment_type": "air_handling_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 5 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2014,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0015",
+          "WO-0016",
+          "WO-0018",
+          "WO-0019",
+          "WO-0021"
+        ]
+      },
+      "site": "Harborview Medical Center",
+      "work_order_count": 5
+    },
+    {
+      "asset_id": "AHU-4",
+      "contradiction_pairs": [],
+      "equipment_type": "air_handling_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 2 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2018,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0022",
+          "WO-0023"
+        ]
+      },
+      "site": "Harborview Medical Center",
+      "work_order_count": 2
+    },
+    {
+      "asset_id": "CH-1",
+      "contradiction_pairs": [
+        {
+          "adjudication": "resolved: tube-cleaning record in the second work order confirms the fouling diagnosis; compressor replacement was never performed",
+          "asset_id": "CH-1",
+          "claim_a": "WO-0028:resolution:Surge caused by worn compressor; compressor replacement scheduled.",
+          "claim_b": "WO-0034:notes:Surge traced to fouled condenser tubes; compressor itself healthy and original."
+        }
+      ],
+      "equipment_type": "chiller",
+      "evidence_sufficiency": {
+        "reason": "15 resolvable work orders (>= threshold 8)",
+        "sufficient": true
+      },
+      "installed_year": 2011,
+      "known_failure_causes": [
+        {
+          "cause": "refrigerant_leak",
+          "evidence": [
+            {
+              "field": "notes",
+              "quote": "Charge low again three weeks after top-off, suspect leak at evaporator coil. Bubble test shows leak at evaporator return bend.",
+              "work_order_id": "WO-0025"
+            },
+            {
+              "field": "notes",
+              "quote": "Charge low again three weeks after top-off, suspect leak at evaporator coil. Bubble test shows leak at evaporator return bend.",
+              "work_order_id": "WO-0031"
+            },
+            {
+              "field": "notes",
+              "quote": "Low suction pressure, unit not cooling, evidence of oil at service valve. Electronic detector alarming at the liquid line braze joint.",
+              "work_order_id": "WO-0037"
+            },
+            {
+              "field": "resolution",
+              "quote": "Repaired braze joint, pulled vacuum to 500 microns, weighed in charge.",
+              "work_order_id": "WO-0025"
+            },
+            {
+              "field": "resolution",
+              "quote": "Located and repaired leak at coil header, pressure tested with nitrogen, recharged.",
+              "work_order_id": "WO-0031"
+            },
+            {
+              "field": "resolution",
+              "quote": "Located and repaired leak at coil header, pressure tested with nitrogen, recharged.",
+              "work_order_id": "WO-0037"
+            }
+          ],
+          "first_observed": "2024-01-18T20:38:51",
+          "last_observed": "2025-10-28T16:33:58",
+          "work_order_ids": [
+            "WO-0025",
+            "WO-0031",
+            "WO-0037"
+          ]
+        },
+        {
+          "cause": "compressor_surging",
+          "evidence": [
+            {
+              "field": "notes",
+              "quote": "Chiller surging audibly at high load, trips on surge counter. Impeller fouling suspected, surge margin below minimum.",
+              "work_order_id": "WO-0028"
+            },
+            {
+              "field": "notes",
+              "quote": "Surge alarm on hot afternoons, approach temperature climbing. Impeller fouling suspected, surge margin below minimum. Surge traced to fouled condenser tubes; co",
+              "work_order_id": "WO-0034"
+            },
+            {
+              "field": "resolution",
+              "quote": "Surge caused by worn compressor; compressor replacement scheduled.",
+              "work_order_id": "WO-0028"
+            },
+            {
+              "field": "resolution",
+              "quote": "PRV serviced and recalibrated, chiller ran full load without surge.",
+              "work_order_id": "WO-0034"
+            }
+          ],
+          "first_observed": "2024-12-16T18:00:11",
+          "last_observed": "2025-01-11T05:37:43",
+          "work_order_ids": [
+            "WO-0028",
+            "WO-0034"
+          ]
+        }
+      ],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0024",
+          "WO-0025",
+          "WO-0026",
+          "WO-0027",
+          "WO-0028",
+          "WO-0029",
+          "WO-0030",
+          "WO-0031",
+          "WO-0032",
+          "WO-0033",
+          "WO-0034",
+          "WO-0035",
+          "WO-0036",
+          "WO-0037",
+          "WO-0038"
+        ]
+      },
+      "site": "Harborview Medical Center",
+      "work_order_count": 15
+    },
+    {
+      "asset_id": "CT-1",
+      "contradiction_pairs": [],
+      "equipment_type": "cooling_tower",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 6 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2011,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0039",
+          "WO-0040",
+          "WO-0041",
+          "WO-0042",
+          "WO-0043",
+          "WO-0044"
+        ]
+      },
+      "site": "Harborview Medical Center",
+      "work_order_count": 6
+    },
+    {
+      "asset_id": "BLR-1",
+      "contradiction_pairs": [
+        {
+          "adjudication": "unresolved",
+          "asset_id": "BLR-1",
+          "claim_a": "WO-0049:resolution:Replaced gas valve, verified manifold pressure.",
+          "claim_b": "WO-0055:notes:Gas valve nameplate dated 2007, appears original \u2014 no record of prior replacement."
+        }
+      ],
+      "equipment_type": "boiler",
+      "evidence_sufficiency": {
+        "reason": "15 resolvable work orders (>= threshold 8)",
+        "sufficient": true
+      },
+      "installed_year": 2007,
+      "known_failure_causes": [
+        {
+          "cause": "circulator_pump_failure",
+          "evidence": [
+            {
+              "field": "notes",
+              "quote": "Slab loop cold, circulator not proving flow. Circulator seal leaking, coupling worn.",
+              "work_order_id": "WO-0046"
+            },
+            {
+              "field": "notes",
+              "quote": "Slab loop cold, circulator not proving flow. Pump impeller jammed by debris.",
+              "work_order_id": "WO-0052"
+            },
+            {
+              "field": "notes",
+              "quote": "End switch never closes, pump amps low. Pump impeller jammed by debris.",
+              "work_order_id": "WO-0058"
+            },
+            {
+              "field": "resolution",
+              "quote": "New pump installed, system balanced and verified.",
+              "work_order_id": "WO-0046"
+            },
+            {
+              "field": "resolution",
+              "quote": "New pump installed, system balanced and verified.",
+              "work_order_id": "WO-0052"
+            },
+            {
+              "field": "resolution",
+              "quote": "Replaced circulator and seal, purged air, verified flow and delta-T.",
+              "work_order_id": "WO-0058"
+            }
+          ],
+          "first_observed": "2024-06-07T00:58:49",
+          "last_observed": "2025-02-19T05:48:03",
+          "work_order_ids": [
+            "WO-0046",
+            "WO-0052",
+            "WO-0058"
+          ]
+        },
+        {
+          "cause": "ignition_failure",
+          "evidence": [
+            {
+              "field": "notes",
+              "quote": "Boiler locks out on ignition, tenant without heat overnight. Igniter cracked, flame sensor fouled with oxidation.",
+              "work_order_id": "WO-0049"
+            },
+            {
+              "field": "notes",
+              "quote": "Intermittent lockouts, flame signal weak. Gas pressure low at manifold, ignition sequence fails. Gas valve nameplate dated 2007, appears original \u2014 no record of",
+              "work_order_id": "WO-0055"
+            },
+            {
+              "field": "resolution",
+              "quote": "Replaced gas valve, verified manifold pressure.",
+              "work_order_id": "WO-0049"
+            },
+            {
+              "field": "resolution",
+              "quote": "Replaced igniter, cleaned flame sensor, verified flame signal and firing rate.",
+              "work_order_id": "WO-0055"
+            }
+          ],
+          "first_observed": "2024-10-19T15:06:59",
+          "last_observed": "2025-09-06T13:58:17",
+          "work_order_ids": [
+            "WO-0049",
+            "WO-0055"
+          ]
+        }
+      ],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0045",
+          "WO-0046",
+          "WO-0047",
+          "WO-0048",
+          "WO-0049",
+          "WO-0050",
+          "WO-0051",
+          "WO-0052",
+          "WO-0053",
+          "WO-0054",
+          "WO-0055",
+          "WO-0056",
+          "WO-0057",
+          "WO-0058",
+          "WO-0059"
+        ]
+      },
+      "site": "Harborview Medical Center",
+      "work_order_count": 15
+    },
+    {
+      "asset_id": "RTU-1",
+      "contradiction_pairs": [],
+      "equipment_type": "rooftop_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 6 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2013,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0060",
+          "WO-0061",
+          "WO-0062",
+          "WO-0063",
+          "WO-0064",
+          "WO-0065"
+        ]
+      },
+      "site": "Meridian Office Park",
+      "work_order_count": 6
+    },
+    {
+      "asset_id": "RTU-2",
+      "contradiction_pairs": [
+        {
+          "adjudication": "unresolved",
+          "asset_id": "RTU-2",
+          "claim_a": "WO-0070:resolution:Replaced compressor with new unit, system recharged.",
+          "claim_b": "WO-0076:notes:Compressor nameplate shows 2011 manufacture date; appears original, no record of prior replacement."
+        }
+      ],
+      "equipment_type": "rooftop_unit",
+      "evidence_sufficiency": {
+        "reason": "15 resolvable work orders (>= threshold 8)",
+        "sufficient": true
+      },
+      "installed_year": 2012,
+      "known_failure_causes": [
+        {
+          "cause": "condenser_fan_motor_failure",
+          "evidence": [
+            {
+              "field": "notes",
+              "quote": "Loud scraping from condenser section, fan blade rubbing shroud. Fan blade loose on motor shaft, motor mounts corroded through.",
+              "work_order_id": "WO-0067"
+            },
+            {
+              "field": "notes",
+              "quote": "Loud scraping from condenser section, fan blade rubbing shroud. Condenser fan motor seized, shaft will not turn by hand.",
+              "work_order_id": "WO-0073"
+            },
+            {
+              "field": "notes",
+              "quote": "Condenser fan not turning, unit steaming at the condenser coil. Fan blade loose on motor shaft, motor mounts corroded through.",
+              "work_order_id": "WO-0079"
+            },
+            {
+              "field": "resolution",
+              "quote": "New fan motor installed, checked rotation and superheat.",
+              "work_order_id": "WO-0067"
+            },
+            {
+              "field": "resolution",
+              "quote": "New fan motor installed, checked rotation and superheat.",
+              "work_order_id": "WO-0073"
+            },
+            {
+              "field": "resolution",
+              "quote": "Replaced condenser fan motor and blade, verified amp draw within FLA.",
+              "work_order_id": "WO-0079"
+            }
+          ],
+          "first_observed": "2024-04-10T21:14:13",
+          "last_observed": "2025-09-27T00:46:04",
+          "work_order_ids": [
+            "WO-0067",
+            "WO-0073",
+            "WO-0079"
+          ]
+        },
+        {
+          "cause": "compressor_failure",
+          "evidence": [
+            {
+              "field": "notes",
+              "quote": "Unit hard starting, compressor drawing locked-rotor amps on restart. Compressor winding resistance out of range, confirm with megger.",
+              "work_order_id": "WO-0070"
+            },
+            {
+              "field": "notes",
+              "quote": "Unit hard starting, compressor drawing locked-rotor amps on restart. Compressor winding resistance out of range, confirm with megger. Compressor nameplate shows",
+              "work_order_id": "WO-0076"
+            },
+            {
+              "field": "resolution",
+              "quote": "Replaced compressor with new unit, system recharged.",
+              "work_order_id": "WO-0070"
+            },
+            {
+              "field": "resolution",
+              "quote": "Compressor replaced under warranty, system evacuated and recharged to nameplate.",
+              "work_order_id": "WO-0076"
+            }
+          ],
+          "first_observed": "2024-07-31T05:20:08",
+          "last_observed": "2025-02-12T19:18:31",
+          "work_order_ids": [
+            "WO-0070",
+            "WO-0076"
+          ]
+        }
+      ],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0066",
+          "WO-0067",
+          "WO-0068",
+          "WO-0069",
+          "WO-0070",
+          "WO-0071",
+          "WO-0072",
+          "WO-0073",
+          "WO-0074",
+          "WO-0075",
+          "WO-0076",
+          "WO-0077",
+          "WO-0078",
+          "WO-0079",
+          "WO-0080"
+        ]
+      },
+      "site": "Meridian Office Park",
+      "work_order_count": 15
+    },
+    {
+      "asset_id": "RTU-3",
+      "contradiction_pairs": [],
+      "equipment_type": "rooftop_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 4 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2016,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0081",
+          "WO-0082",
+          "WO-0084",
+          "WO-0085"
+        ]
+      },
+      "site": "Meridian Office Park",
+      "work_order_count": 4
+    },
+    {
+      "asset_id": "RTU-4",
+      "contradiction_pairs": [],
+      "equipment_type": "rooftop_unit",
+      "evidence_sufficiency": {
+        "reason": "15 resolvable work orders (>= threshold 8)",
+        "sufficient": true
+      },
+      "installed_year": 2010,
+      "known_failure_causes": [
+        {
+          "cause": "control_board_failure",
+          "evidence": [
+            {
+              "field": "notes",
+              "quote": "Intermittent lockouts, board LEDs flashing fault code 4. Corroded terminals on defrost board, traces discolored.",
+              "work_order_id": "WO-0088"
+            },
+            {
+              "field": "notes",
+              "quote": "Unit randomly shuts down, resets itself after power cycle. Corroded terminals on defrost board, traces discolored.",
+              "work_order_id": "WO-0094"
+            },
+            {
+              "field": "notes",
+              "quote": "Intermittent lockouts, board LEDs flashing fault code 4. Corroded terminals on defrost board, traces discolored.",
+              "work_order_id": "WO-0100"
+            },
+            {
+              "field": "resolution",
+              "quote": "New defrost board installed, test ran full cycle without lockout.",
+              "work_order_id": "WO-0088"
+            },
+            {
+              "field": "resolution",
+              "quote": "Replaced control board and harness, verified stages sequence correctly.",
+              "work_order_id": "WO-0094"
+            },
+            {
+              "field": "resolution",
+              "quote": "New defrost board installed, test ran full cycle without lockout.",
+              "work_order_id": "WO-0100"
+            }
+          ],
+          "first_observed": "2024-07-20T06:19:53",
+          "last_observed": "2025-10-11T16:01:00",
+          "work_order_ids": [
+            "WO-0088",
+            "WO-0094",
+            "WO-0100"
+          ]
+        },
+        {
+          "cause": "compressor_failure",
+          "evidence": [
+            {
+              "field": "notes",
+              "quote": "Compressor short cycling and tripping on high head pressure. Compressor winding resistance out of range, confirm with megger.",
+              "work_order_id": "WO-0091"
+            },
+            {
+              "field": "notes",
+              "quote": "Compressor short cycling and tripping on high head pressure. Suspected failed compressor, valves weak on pump-down check.",
+              "work_order_id": "WO-0097"
+            },
+            {
+              "field": "resolution",
+              "quote": "Compressor replaced under warranty, system evacuated and recharged to nameplate.",
+              "work_order_id": "WO-0091"
+            },
+            {
+              "field": "resolution",
+              "quote": "Compressor replaced under warranty, system evacuated and recharged to nameplate.",
+              "work_order_id": "WO-0097"
+            }
+          ],
+          "first_observed": "2025-05-26T05:45:58",
+          "last_observed": "2025-08-28T04:37:56",
+          "work_order_ids": [
+            "WO-0091",
+            "WO-0097"
+          ]
+        }
+      ],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0087",
+          "WO-0088",
+          "WO-0089",
+          "WO-0090",
+          "WO-0091",
+          "WO-0092",
+          "WO-0093",
+          "WO-0094",
+          "WO-0095",
+          "WO-0096",
+          "WO-0097",
+          "WO-0098",
+          "WO-0099",
+          "WO-0100",
+          "WO-0101"
+        ]
+      },
+      "site": "Meridian Office Park",
+      "work_order_count": 15
+    },
+    {
+      "asset_id": "RTU-5",
+      "contradiction_pairs": [],
+      "equipment_type": "rooftop_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 2 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2020,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0102",
+          "WO-0103"
+        ]
+      },
+      "site": "Meridian Office Park",
+      "work_order_count": 2
+    },
+    {
+      "asset_id": "AHU-5",
+      "contradiction_pairs": [],
+      "equipment_type": "air_handling_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 7 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2015,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0104",
+          "WO-0105",
+          "WO-0106",
+          "WO-0107",
+          "WO-0108",
+          "WO-0109",
+          "WO-0110"
+        ]
+      },
+      "site": "Meridian Office Park",
+      "work_order_count": 7
+    },
+    {
+      "asset_id": "AHU-6",
+      "contradiction_pairs": [],
+      "equipment_type": "air_handling_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 7 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2012,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0111",
+          "WO-0112",
+          "WO-0113",
+          "WO-0114",
+          "WO-0115",
+          "WO-0116",
+          "WO-0117"
+        ]
+      },
+      "site": "Cedar Ridge Mall",
+      "work_order_count": 7
+    },
+    {
+      "asset_id": "CH-2",
+      "contradiction_pairs": [],
+      "equipment_type": "chiller",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 6 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2015,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0118",
+          "WO-0119",
+          "WO-0120",
+          "WO-0121",
+          "WO-0122",
+          "WO-0123"
+        ]
+      },
+      "site": "Cedar Ridge Mall",
+      "work_order_count": 6
+    },
+    {
+      "asset_id": "CT-2",
+      "contradiction_pairs": [],
+      "equipment_type": "cooling_tower",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 2 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2015,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0124",
+          "WO-0125"
+        ]
+      },
+      "site": "Cedar Ridge Mall",
+      "work_order_count": 2
+    },
+    {
+      "asset_id": "BLR-2",
+      "contradiction_pairs": [],
+      "equipment_type": "boiler",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 2 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2018,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0126",
+          "WO-0127"
+        ]
+      },
+      "site": "Cedar Ridge Mall",
+      "work_order_count": 2
+    },
+    {
+      "asset_id": "EF-1",
+      "contradiction_pairs": [],
+      "equipment_type": "exhaust_fan",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 6 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2012,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0128",
+          "WO-0129",
+          "WO-0130",
+          "WO-0131",
+          "WO-0132",
+          "WO-0133"
+        ]
+      },
+      "site": "Cedar Ridge Mall",
+      "work_order_count": 6
+    },
+    {
+      "asset_id": "EF-2",
+      "contradiction_pairs": [],
+      "equipment_type": "exhaust_fan",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 2 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2008,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0134",
+          "WO-0135"
+        ]
+      },
+      "site": "Cedar Ridge Mall",
+      "work_order_count": 2
+    },
+    {
+      "asset_id": "MAU-1",
+      "contradiction_pairs": [],
+      "equipment_type": "make_up_air_unit",
+      "evidence_sufficiency": {
+        "reason": "thin_history: only 6 resolvable work orders (< threshold 8)",
+        "sufficient": false
+      },
+      "installed_year": 2019,
+      "known_failure_causes": [],
+      "provenance": {
+        "work_order_ids": [
+          "WO-0136",
+          "WO-0137",
+          "WO-0138",
+          "WO-0139",
+          "WO-0140",
+          "WO-0141"
+        ]
+      },
+      "site": "Cedar Ridge Mall",
+      "work_order_count": 6
+    }
+  ],
+  "corpus": {
+    "asset_count": 20,
+    "malformed_row_count": 9,
+    "path": "corpus.csv",
+    "work_order_count": 150
+  },
+  "generator_seed": 42,
+  "schema_version": "1.0.0",
+  "sufficiency_threshold_resolvable_orders": 8
+}
