@@ -120,3 +120,75 @@ class ReviewItem(Base):
     external_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
     reason: Mapped[str] = mapped_column(Text, nullable=False)
     raw_row: Mapped[str] = mapped_column(Text, nullable=False)  # JSON list of raw cells
+
+
+class Diagnosis(Base):
+    """One diagnosis snapshot for an asset, in exactly one of three states.
+
+    The states carry different payloads, and the check constraints make the
+    product's core commitment physical: an ``insufficient_evidence`` row has
+    no causes at all — an abstention cannot carry a confidence figure because
+    the column is NULL by constraint, not by convention. ``ranked`` rows
+    always carry causes and never contradictions; ``contested`` rows carry
+    both (the ranking stays visible next to the conflict, citations intact).
+    ``causes`` / ``contradictions`` are JSON arrays of the scored-cause /
+    contradiction-pair payloads the ranker emits.
+    """
+
+    __tablename__ = "diagnoses"
+    __table_args__ = (
+        CheckConstraint(
+            "state IN ('ranked', 'insufficient_evidence', 'contested')",
+            name="ck_diagnosis_state",
+        ),
+        CheckConstraint(
+            "state != 'insufficient_evidence' OR (causes IS NULL AND what_would_help IS NOT NULL)",
+            name="ck_diagnosis_abstention_has_no_causes",
+        ),
+        CheckConstraint(
+            "state != 'ranked' OR (causes IS NOT NULL AND contradictions IS NULL)",
+            name="ck_diagnosis_ranked_has_causes",
+        ),
+        CheckConstraint(
+            "state != 'contested' OR (causes IS NOT NULL AND contradictions IS NOT NULL)",
+            name="ck_diagnosis_contested_carries_both",
+        ),
+    )
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    asset_id: Mapped[str] = mapped_column(
+        ForeignKey("assets.id"), nullable=False, index=True
+    )
+    state: Mapped[str] = mapped_column(String(32), nullable=False)
+    rationale: Mapped[str] = mapped_column(Text, nullable=False)
+    what_would_help: Mapped[str | None] = mapped_column(Text, nullable=True)
+    as_of: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    causes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    contradictions: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
+class Feedback(Base):
+    """A technician's verdict on one diagnosis row.
+
+    ``confirm`` agrees with the top cause, ``correct`` names what the cause
+    should have been (``corrected_cause``), ``reject`` disputes the diagnosis
+    or the abstention. The optional ``note`` carries the reasoning a person
+    would tell a colleague.
+    """
+
+    __tablename__ = "feedback"
+    __table_args__ = (
+        CheckConstraint(
+            "verdict IN ('confirm', 'correct', 'reject')", name="ck_feedback_verdict"
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    diagnosis_id: Mapped[str] = mapped_column(
+        ForeignKey("diagnoses.id"), nullable=False, index=True
+    )
+    verdict: Mapped[str] = mapped_column(String(16), nullable=False)
+    corrected_cause: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)

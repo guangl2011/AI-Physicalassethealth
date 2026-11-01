@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterator
+from datetime import datetime
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -23,12 +24,21 @@ from insmart_api.ingestion.pipeline import (
     ingest_work_orders,
     register_assets,
 )
-from insmart_api.models import Asset, Observation, ReviewItem
+from insmart_api.models import Asset, Diagnosis, Feedback, Observation, ReviewItem
+from insmart_api.ranker.service import DiagnosisService
 from insmart_api.schemas import (
     AssetIn,
     AssetOut,
     AssetRegistrationOut,
+    ContestedDiagnosisOut,
+    ContradictionPairOut,
+    DiagnosisOut,
+    FeedbackIn,
+    FeedbackOut,
     IngestReportOut,
+    InsufficientDiagnosisOut,
+    RankedCauseOut,
+    RankedDiagnosisOut,
     ReviewItemOut,
     ReviewListOut,
     TimelineEntryOut,
@@ -185,4 +195,104 @@ def review_list(session: Annotated[Session, Depends(get_db)]) -> ReviewListOut:
             )
             for item in items
         ],
+    )
+
+
+# --- diagnosis ------------------------------------------------------------------
+
+
+def _diagnosis_out(diagnosis: Diagnosis) -> DiagnosisOut:
+    """Map a stored diagnosis row to its state's response schema."""
+    if diagnosis.state == "insufficient_evidence":
+        # An abstention carries no causes — the schema forbids it.
+        return InsufficientDiagnosisOut(
+            state="insufficient_evidence",
+            diagnosis_id=diagnosis.id,
+            asset_id=diagnosis.asset_id,
+            as_of=diagnosis.as_of,
+            rationale=diagnosis.rationale,
+            what_would_help=diagnosis.what_would_help or "",
+        )
+    causes = [
+        RankedCauseOut.model_validate(cause)
+        for cause in json.loads(diagnosis.causes or "[]")
+    ]
+    if diagnosis.state == "contested":
+        return ContestedDiagnosisOut(
+            state="contested",
+            diagnosis_id=diagnosis.id,
+            asset_id=diagnosis.asset_id,
+            as_of=diagnosis.as_of,
+            rationale=diagnosis.rationale,
+            contradictions=[
+                ContradictionPairOut.model_validate(pair)
+                for pair in json.loads(diagnosis.contradictions or "[]")
+            ],
+            causes=causes,
+        )
+    return RankedDiagnosisOut(
+        state="ranked",
+        diagnosis_id=diagnosis.id,
+        asset_id=diagnosis.asset_id,
+        as_of=diagnosis.as_of,
+        rationale=diagnosis.rationale,
+        causes=causes,
+    )
+
+
+@router.get("/assets/{asset_id}/diagnosis")
+def asset_diagnosis(
+    asset_id: str,
+    session: Annotated[Session, Depends(get_db)],
+    as_of: datetime | None = None,
+) -> DiagnosisOut:
+    """Diagnose an asset as of a moment (default: now); each call snapshots a row.
+
+    The optional ``as_of`` query parameter pins the diagnostic moment — how
+    the evaluation runs the same engine over historical evidence.
+    """
+    service = DiagnosisService(session)
+    try:
+        diagnosis = service.diagnose(asset_id, as_of=as_of)
+    except LookupError as error:
+        session.rollback()
+        raise HTTPException(status_code=404, detail=str(error)) from error
+    session.commit()
+    return _diagnosis_out(diagnosis)
+
+
+@router.post("/diagnoses/{diagnosis_id}/feedback")
+def diagnose_feedback(
+    diagnosis_id: str,
+    feedback: FeedbackIn,
+    session: Annotated[Session, Depends(get_db)],
+) -> FeedbackOut:
+    """Record a technician's verdict on a diagnosis (confirm / correct / reject)."""
+    diagnosis = session.get(Diagnosis, diagnosis_id)
+    if diagnosis is None:
+        raise HTTPException(
+            status_code=404, detail=f"diagnosis {diagnosis_id!r} does not exist"
+        )
+    if feedback.verdict == "correct" and not feedback.corrected_cause:
+        raise HTTPException(
+            status_code=422,
+            detail="a 'correct' verdict needs corrected_cause — the cause it should have been",
+        )
+    row = Feedback(
+        diagnosis_id=diagnosis_id,
+        verdict=feedback.verdict,
+        corrected_cause=feedback.corrected_cause,
+        note=feedback.note,
+        created_at=datetime.now(),
+    )
+    session.add(row)
+    session.commit()
+    session.refresh(row)
+    return FeedbackOut(
+        id=row.id,
+        diagnosis_id=row.diagnosis_id,
+        verdict=row.verdict,
+        corrected_cause=row.corrected_cause,
+        note=row.note,
+        created_at=row.created_at,
     )
