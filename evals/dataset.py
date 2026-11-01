@@ -48,12 +48,8 @@ def session_factory(client: TestClient) -> Callable[[], Any]:
     return factory
 
 
-def build_ingested_store(db_path: Path) -> TestClient:
-    """A fresh store with the asset inventory and full seed corpus ingested.
-
-    Uses the real HTTP routes (register assets, upload the CSV) so the
-    harness evaluates the same pipeline a deployment runs.
-    """
+def build_store(db_path: Path) -> TestClient:
+    """A fresh store with only the asset inventory registered (no corpus yet)."""
     labels = load_labels()
     client = TestClient(create_app(f"sqlite:///{db_path}"))
     response = client.post(
@@ -69,9 +65,26 @@ def build_ingested_store(db_path: Path) -> TestClient:
         ],
     )
     assert response.status_code == 200, response.text
+    return client
+
+
+def ingest_seed_corpus(client: TestClient) -> dict[str, Any]:
+    """Upload the seed corpus through the real route; return the ingest report."""
     response = client.post(
         "/ingest/work-orders",
         files={"file": ("corpus.csv", load_corpus_csv().encode("utf-8"), "text/csv")},
     )
     assert response.status_code == 200, response.text
+    report: dict[str, Any] = response.json()
+    return report
+
+
+def build_ingested_store(db_path: Path) -> TestClient:
+    """A fresh store with the asset inventory and full seed corpus ingested.
+
+    Uses the real HTTP routes (register assets, upload the CSV) so the
+    harness evaluates the same pipeline a deployment runs.
+    """
+    client = build_store(db_path)
+    ingest_seed_corpus(client)
     return client
