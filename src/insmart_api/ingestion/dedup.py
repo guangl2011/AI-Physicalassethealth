@@ -16,14 +16,17 @@ from typing import Any
 from insmart_api.ingestion.parsing import WorkOrderRow
 
 # The semantic fields whose equality defines "same work order, same content".
-# Provenance fields (source file/row) are deliberately excluded: re-uploading
-# the same record under a different file name is still the same record.
+# ``asset_id`` is the entity RESOLVED by the previous stage — the raw
+# asset_tag spelling is provenance, not identity, so a re-export that says
+# 'ahu-1' where the original said 'AHU-1' is still the same record.
+# Provenance fields (source file/row) are excluded for the same reason:
+# re-uploading the same record under a different file name is the same record.
 SEMANTIC_FIELDS: tuple[str, ...] = (
     "work_order_id",
     "recorded_at",
     "completed_at",
     "site",
-    "asset_tag",
+    "asset_id",
     "summary",
     "technician",
     "notes",
@@ -33,14 +36,17 @@ SEMANTIC_FIELDS: tuple[str, ...] = (
 )
 
 
-def row_content(row: WorkOrderRow) -> dict[str, Any]:
-    """Canonical content map for one parsed work-order row."""
+def row_content(row: WorkOrderRow, asset_id: str) -> dict[str, Any]:
+    """Canonical content map for one parsed work-order row.
+
+    ``asset_id`` is the asset the row resolved to during entity resolution.
+    """
     return {
         "work_order_id": row.work_order_id,
         "recorded_at": row.created_at.isoformat(),
         "completed_at": row.completed_at.isoformat() if row.completed_at else None,
         "site": row.fields["site"],
-        "asset_tag": row.asset_tag,
+        "asset_id": asset_id,
         "summary": row.fields["summary"],
         "technician": row.fields["technician"],
         "notes": row.fields["notes"],
@@ -105,9 +111,13 @@ class DuplicateDetector:
             for observation_id, content in (stored_content or {}).items()
         }
 
-    def classify(self, row: WorkOrderRow) -> DuplicateVerdict:
-        """Classify one parsed row as accepted, collapsed, or conflict."""
-        content = row_content(row)
+    def classify(self, row: WorkOrderRow, asset_id: str) -> DuplicateVerdict:
+        """Classify one parsed row as accepted, collapsed, or conflict.
+
+        ``asset_id`` is the entity the row resolved to; identity is keyed on
+        the resolved asset, never the raw tag spelling.
+        """
+        content = row_content(row, asset_id)
         fingerprint = content_fingerprint(content)
         stored_hash = self._hashes.get(row.work_order_id)
         if stored_hash is None:
@@ -125,8 +135,9 @@ class DuplicateDetector:
 def stored_content_from_payload(payload_json: str) -> dict[str, Any]:
     """Extract the semantic content of a persisted observation from its payload.
 
-    The payload is the observation's content plus provenance keys
-    (source_file/source_row); the semantic subset drives conflict diffs.
+    The payload carries the raw CSV cells plus canonical semantic fields and
+    provenance (source_file/source_row); the semantic subset drives conflict
+    diffs across runs.
     """
     payload: dict[str, Any] = json.loads(payload_json)
     return {key: payload.get(key) for key in SEMANTIC_FIELDS}

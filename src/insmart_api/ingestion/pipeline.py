@@ -141,8 +141,16 @@ def _build_observation(row: WorkOrderRow, asset_id: str, source_name: str) -> Ob
     Ingestion stops here — text and structured fields are stored for the
     downstream extraction task; no extraction or diagnosis happens yet.
     """
-    content = row_content(row)
-    payload = {**content, "source_file": source_name, "source_row": row.row_number}
+    content = row_content(row, asset_id)
+    payload = {
+        **row.fields,  # raw stripped text of every CSV column (asset_tag, site, dates)
+        "asset_id": asset_id,
+        "recorded_at": content["recorded_at"],
+        "completed_at": content["completed_at"],
+        "labor_hours": content["labor_hours"],
+        "source_file": source_name,
+        "source_row": row.row_number,
+    }
     return Observation(
         id=row.work_order_id,
         asset_id=asset_id,
@@ -199,7 +207,7 @@ def ingest_work_orders(session: Session, source_name: str, csv_text: str) -> Ing
                 ReviewEntry(row_number, outcome.work_order_id, resolution.reason, cells)
             )
             continue
-        verdict = detector.classify(outcome)
+        verdict = detector.classify(outcome, resolution.asset_id)
         if verdict.status == "collapsed":
             deduplicated += 1
             continue
