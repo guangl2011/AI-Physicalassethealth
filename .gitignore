@@ -14,3 +14,6 @@ frontend/dist/
 # Environment / tooling
 .env
 .DS_Store
+
+# Local SQLite database (created by the API's default engine)
+*.db
