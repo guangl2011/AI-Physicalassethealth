@@ -23,7 +23,8 @@ requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src", "."]
+include = ["insmart_api*", "evals*"]
 
 [tool.ruff]
 line-length = 100
