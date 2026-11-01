@@ -24,7 +24,7 @@ from insmart_api.ingestion.pipeline import (
     ingest_work_orders,
     register_assets,
 )
-from insmart_api.models import Asset, Diagnosis, Observation, ReviewItem
+from insmart_api.models import Asset, Diagnosis, Feedback, Observation, ReviewItem
 from insmart_api.ranker.service import DiagnosisService
 from insmart_api.schemas import (
     AssetIn,
@@ -33,6 +33,8 @@ from insmart_api.schemas import (
     ContestedDiagnosisOut,
     ContradictionPairOut,
     DiagnosisOut,
+    FeedbackIn,
+    FeedbackOut,
     IngestReportOut,
     InsufficientDiagnosisOut,
     RankedCauseOut,
@@ -257,3 +259,40 @@ def asset_diagnosis(
         raise HTTPException(status_code=404, detail=str(error)) from error
     session.commit()
     return _diagnosis_out(diagnosis)
+
+
+@router.post("/diagnoses/{diagnosis_id}/feedback")
+def diagnose_feedback(
+    diagnosis_id: str,
+    feedback: FeedbackIn,
+    session: Annotated[Session, Depends(get_db)],
+) -> FeedbackOut:
+    """Record a technician's verdict on a diagnosis (confirm / correct / reject)."""
+    diagnosis = session.get(Diagnosis, diagnosis_id)
+    if diagnosis is None:
+        raise HTTPException(
+            status_code=404, detail=f"diagnosis {diagnosis_id!r} does not exist"
+        )
+    if feedback.verdict == "correct" and not feedback.corrected_cause:
+        raise HTTPException(
+            status_code=422,
+            detail="a 'correct' verdict needs corrected_cause — the cause it should have been",
+        )
+    row = Feedback(
+        diagnosis_id=diagnosis_id,
+        verdict=feedback.verdict,
+        corrected_cause=feedback.corrected_cause,
+        note=feedback.note,
+        created_at=datetime.now(),
+    )
+    session.add(row)
+    session.commit()
+    session.refresh(row)
+    return FeedbackOut(
+        id=row.id,
+        diagnosis_id=row.diagnosis_id,
+        verdict=row.verdict,
+        corrected_cause=row.corrected_cause,
+        note=row.note,
+        created_at=row.created_at,
+    )
